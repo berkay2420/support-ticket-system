@@ -3,6 +3,7 @@
 import { useActionState, useEffect } from 'react';
 import { logoutUser } from '@/actions/auth.actions';
 import { toast } from 'sonner';
+import { LogOut } from 'lucide-react';
 
 const LogoutButton = () => {
   const initialState = {
@@ -24,9 +25,10 @@ const LogoutButton = () => {
     <form action={formAction}>
       <button
         type='submit'
-        className='bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition'
+        className='bg-linear-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-4 py-2 rounded-lg font-semibold transition-all duration-300 hover:shadow-md flex items-center gap-2'
       >
-        Logout
+        <LogOut className='w-4 h-4' />
+        <span>Sign Out</span>
       </button>
     </form>
   );

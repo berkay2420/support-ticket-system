@@ -1,10 +1,11 @@
 import NewTicketForm from "./ticket-form"
 
-const NewTicketPage = () =>{
+const NewTicketPage = () => {
   return (
-    <div className='w-full max-w-md bg-white shadow-md rounded-lg p-8 border border-gray-200'>
-
-      <NewTicketForm/>
+    <div className='min-h-screen bg-linear-to-br from-emerald-50 via-white to-teal-50 p-8'>
+      <div className='max-w-2xl mx-auto'>
+        <NewTicketForm />
+      </div>
     </div>
   )
 }

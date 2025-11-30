@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Support Ticketing App",
-  description: "Support Ticketing System",
+  title: "Quick Ticket",
+  description: "Professional and simple support ticket management system",
 };
 
 export default function RootLayout({
@@ -27,11 +27,21 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-linear-to-br from-emerald-50 via-white to-teal-50`}
       > 
         <Navbar />
         {children}
-        <Toaster position="top-center"/>
+        <Toaster 
+          position="top-center"
+          theme="light"
+          toastOptions={{
+            classNames: {
+              toast: 'bg-white text-slate-900 border border-emerald-200 shadow-md',
+              error: 'bg-red-50 border-red-200',
+              success: 'bg-emerald-50 border-emerald-200',
+            }
+          }}
+        />
       </body>
     </html>
   );
