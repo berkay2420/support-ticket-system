@@ -30,7 +30,8 @@ export async function createTicket(
         priority,
         user: {
           connect: { id:user.id }
-        }
+        },
+        issuerDepartment: "sales"
       }
     });
 

@@ -37,7 +37,8 @@ export async function registerUser(
       data:{
         name,
         email,
-        password: hashedPassword
+        password: hashedPassword,
+        department: "sales"
       }
     })
 

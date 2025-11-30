@@ -9,23 +9,36 @@ datasource db {
 }
 
 model User {
-  id          String      @id @default(cuid())
-  email       String      @unique
-  name        String?
-  password    String
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-  tickets     Ticket[]
+  id                      String      @id @default(cuid())
+  email                   String      @unique
+  name                    String?
+  password                String
+  createdAt               DateTime    @default(now())
+  updatedAt               DateTime    @updatedAt
+  tickets                 Ticket[]
+  time_tracking_tickets   TimeTrackingTicket[]
+  department              String
 }
 
 model Ticket {
-  id          Int         @id @default(autoincrement())
-  subject     String
-  description String
-  priority    String
-  status      String      @default("Open")
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+  id                  Int         @id @default(autoincrement())
+  subject             String
+  description         String
+  priority            String
+  status              String      @default("Open")
+  createdAt           DateTime    @default(now())
+  updatedAt           DateTime    @updatedAt
+  userId              String
+  user                User        @relation(fields: [userId], references: [id])
+  issuerDepartment    String   
+}
+
+model TimeTrackingTicket {
+  id          String      @id @default(cuid())
   userId      String
   user        User        @relation(fields: [userId], references: [id])
+  description String
+  createdAt   DateTime    @default(now())
+  startTime   DateTime  
+  endTime     DateTime?      
 }

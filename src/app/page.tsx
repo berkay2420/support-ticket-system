@@ -25,6 +25,18 @@ const HomePage = () => {
         >
           View Tickets
         </Link>
+        <Link
+          href='/time-tracking-tickets'
+          className='bg-blue-100 text-gray-700 px-6 py-3 rounded shadow hover:bg-blue-200 transition'
+        >
+          View Tracking Tickets Tickets
+        </Link>
+        <Link
+          href='/time-tracking-tickets/new'
+          className='bg-blue-100 text-gray-700 px-6 py-3 rounded shadow hover:bg-blue-200 transition'
+        >
+          Start new Time tracking ticket
+        </Link>
       </div>
     </main>
   );
