@@ -18,8 +18,9 @@ export async function registerUser(
     const name = formData.get('name') as string;
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
+    const department = formData.get('department') as string;
     
-    if(!name || !email || !password){
+    if(!name || !email || !password || !department){
       return { success: false, message: 'Please fill all the fileds' };
     }
 
@@ -38,11 +39,17 @@ export async function registerUser(
         name,
         email,
         password: hashedPassword,
-        department: "sales"
+        department: department
       }
     })
-
-    const token = await signAuthToken({userId: user.id})
+    const payload = {
+      userId: user.id,
+      name: user.name,
+      email: user.email,
+      department: user.department,
+      isAdmin: user.isAdmin
+    }
+    const token = await signAuthToken(payload);
     await setAuthCookie(token);
 
     logEvent(

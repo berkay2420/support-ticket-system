@@ -18,7 +18,7 @@ const LoginForm = () => {
   useEffect(() => {
     if (state.success) {
       toast.success('Login successful!');
-      router.push('/tickets');
+      router.push('/');
     } else if (state.message) {
       toast.error(state.message);
     }

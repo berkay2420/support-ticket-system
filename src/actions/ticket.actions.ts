@@ -3,6 +3,7 @@ import {prisma} from '@/db/prisma';
 import { revalidatePath } from 'next/cache';
 import { logEvent } from '@/utils/sentry';
 import { getCurrentUser } from '@/lib/current-user';
+import { verifyAuthToken } from '@/lib/auth';
 
 export async function createTicket(
   prevState: { success: boolean; message: string },
@@ -31,7 +32,7 @@ export async function createTicket(
         user: {
           connect: { id:user.id }
         },
-        issuerDepartment: "sales"
+        issuerDepartment: user.department
       }
     });
 
@@ -70,7 +71,6 @@ export async function getTickets() {
     }
 
     const tickets = await prisma.ticket.findMany({
-      where: {userId: user.id},
       orderBy: { createdAt: 'desc'}
     });
 
@@ -80,11 +80,28 @@ export async function getTickets() {
   }
 }
 
-export async function getTicketById(id: string) {
+export async function getTicketById(
+  id: string,
+  user: { department: string; isAdmin: boolean }
+) {
   try {
     const ticket = await prisma.ticket.findUnique({
-      where: {id: Number(id)}
+      where: { id: Number(id) }
     });
+
+    if (!ticket) {
+      return null;
+    }
+
+    
+    if (user.isAdmin) {
+      return ticket;
+    }
+
+    
+    if (ticket.issuerDepartment !== user.department) {
+      return null;
+    }
 
     return ticket;
 

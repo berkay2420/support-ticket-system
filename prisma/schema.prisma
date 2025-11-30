@@ -18,6 +18,7 @@ model User {
   tickets                 Ticket[]
   time_tracking_tickets   TimeTrackingTicket[]
   department              String
+  isAdmin                 Boolean     @default(false)
 }
 
 model Ticket {
@@ -40,5 +41,6 @@ model TimeTrackingTicket {
   description String
   createdAt   DateTime    @default(now())
   startTime   DateTime  
-  endTime     DateTime?      
+  endTime     DateTime?
+  workedMinutes Int?      
 }

@@ -23,7 +23,9 @@ export async function getCurrentUser() {
       select: {
         id: true,
         email: true,
-        name: true
+        name: true,
+        department: true,
+        isAdmin: true
       }
     });
     return user;

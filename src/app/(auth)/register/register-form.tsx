@@ -18,7 +18,7 @@ const RegisterForm = () =>{
   useEffect(() => {
     if(state.success){
       toast.success('Successfully Registerd')
-      router.push('/tickets');
+      router.push('/');
       router.refresh()
     } else if (state.message) {
       toast.error(state.message)
@@ -56,6 +56,16 @@ const RegisterForm = () =>{
             autoComplete='new-password'
             required
           />
+          <select
+            className='w-full border border-gray-200 p-3 rounded focus:outline-none focus:ring-2 focus:ring-blue-400'
+            name='department'
+            required
+          >
+            <option value=''>Select Department</option>
+            <option value='Sales'>Sales</option>
+            <option value='IT'>IT</option>
+            <option value='HR'>HR</option>
+          </select>
           <button
             className='w-full bg-blue-600 text-white p-3 rounded hover:bg-blue-700 transition disabled:opacity-50'
             type='submit'

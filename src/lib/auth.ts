@@ -11,7 +11,7 @@ export async function signAuthToken(payload:any) {
     const token = await new SignJWT(payload)
     .setProtectedHeader({alg:'HS256'})
     .setIssuedAt()
-    .setExpirationTime('7d')
+    .setExpirationTime('10m')
     .sign(secret);
 
     return token;
@@ -74,4 +74,8 @@ export async function removeAuthCookie() {
   } catch (error) {
     console.log(`error while removing cookie erorr ${error}`);
   }
+}
+
+export async function checkUserDepartmen(departmentName:string, token:string){
+  
 }

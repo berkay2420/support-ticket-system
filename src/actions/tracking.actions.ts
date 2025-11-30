@@ -3,7 +3,6 @@ import {prisma} from '@/db/prisma';
 import { revalidatePath } from 'next/cache';
 import { logEvent } from '@/utils/sentry';
 import { getCurrentUser } from '@/lib/current-user';
-import { emit } from 'process';
 
 
 export async function createTrackingTikcet(
@@ -53,9 +52,9 @@ export async function createTrackingTikcet(
 }
 
 export async function finishTrackingTime(
-  prevState: { success: boolean; message: string; endTime?: string },
+  prevState: { success: boolean; message: string; endTime?: string; workedMinutes?: number },
   formData: FormData
-): Promise<{ success: boolean; message: string; endTime?: string }> {
+): Promise<{ success: boolean; message: string; endTime?: string; workedMinutes?: number }> {
   try {
     const user = await getCurrentUser();
     if (!user) {
@@ -65,12 +64,31 @@ export async function finishTrackingTime(
     const ticketId = formData.get('ticketId') as string;
     const endTime = new Date();
 
+    const existingTicket = await prisma.timeTrackingTicket.findUnique({
+      where: { id: ticketId }
+    });
+
+    if (!existingTicket) {
+      return { success: false, message: 'Ticket not found' };
+    }
+
+    const workedMinutes = Math.floor((endTime.getTime() - existingTicket.startTime.getTime()) / (1000 * 60));
+
     const ticket = await prisma.timeTrackingTicket.update({
       where: { id: ticketId },
       data: {
-        endTime: endTime
+        endTime: endTime,
+        workedMinutes: workedMinutes
       }
     });
+
+    logEvent(`Tracking Ticket Finished`,
+        'ticket', 
+        {ticketId: ticket.id, workedMinutes}, 
+        'warning'
+      );
+
+    revalidatePath('/time-tracking-tickets');
 
     return { 
       success: true, 
@@ -85,22 +103,23 @@ export async function finishTrackingTime(
   }
 }
 
-
 export async function getTrackingTickets() {
   try {
     const user = await getCurrentUser();
     
-    if(!user){
+    if (!user) {
       return [];
     }
 
     const tickets = await prisma.timeTrackingTicket.findMany({
-      where: {userId: user.id},
-      orderBy: { createdAt: 'desc'}
+      where: { userId: user.id },
+      orderBy: { createdAt: 'desc' }
     });
 
     return tickets;
+
   } catch (error) {
+    
     return [];
   }
 }

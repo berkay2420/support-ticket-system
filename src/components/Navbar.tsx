@@ -16,16 +16,28 @@ const Navbar = async () => {
         {user ? (
           <>
             <Link
+              href='/time-tracking-tickets/new'
+              className='hover:underline text-gray-700 transition'
+            >
+              New  Tracking Ticket
+            </Link>
+            <Link
               href='/tickets/new'
               className='hover:underline text-gray-700 transition'
             >
-              New Ticket
+              New  Support Ticket
             </Link>
             <Link
               href='/tickets'
               className='hover:underline text-gray-700 transition'
             >
-              My Tickets
+              My Support Tickets
+            </Link>
+            <Link
+              href='/time-tracking-tickets'
+              className='hover:underline text-gray-700 transition'
+            >
+              My Tracking Tickets
             </Link>
             <LogoutButton />
           </>

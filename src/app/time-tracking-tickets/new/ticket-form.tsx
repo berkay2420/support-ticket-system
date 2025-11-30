@@ -13,7 +13,7 @@ const NewTicketForm = () => {
   useEffect(() => {
     if (state.success) {
       toast.success('Ticket Created Successfully');
-      router.push('/tickets');
+      router.push('/time-tracking-tickets');
     }
   }, [state.success, router]);
 

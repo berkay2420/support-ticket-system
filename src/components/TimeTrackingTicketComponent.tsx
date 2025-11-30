@@ -1,6 +1,6 @@
 'use client';
 
-import { useActionState, useEffect, useState } from "react";
+import { useActionState, useEffect } from "react";
 import { toast } from "sonner";
 import { finishTrackingTime } from "@/actions/tracking.actions";
 import type { TimeTrackingTicket } from "@/generated/prisma/client";
@@ -9,9 +9,15 @@ type TimeTrackingTicketProps = {
   ticket: TimeTrackingTicket;
 };
 
+const formatWorkedTime = (minutes: number | null | undefined): string => {
+  if (!minutes) return '';
+  const hours = Math.floor(minutes / 60);
+  const mins = minutes % 60;
+  return `${hours}h ${mins}m`;
+};
+
 const TimeTrackingTicketComponent = ({ ticket }: TimeTrackingTicketProps) => {
-  const [endTime, setEndTime] = useState<Date | null>(ticket.endTime ? new Date(ticket.endTime) : null);
-  const isFinished = endTime !== null;
+  const isFinished = ticket.endTime !== null;
   
   const [state, formAction] = useActionState(
     finishTrackingTime,
@@ -21,11 +27,10 @@ const TimeTrackingTicketComponent = ({ ticket }: TimeTrackingTicketProps) => {
   useEffect(() => {
     if (state.success) {
       toast.success(state.message);
-      setEndTime(new Date());
-    } else if (state.message) {
+    } else if (state.message && state.message !== '') {
       toast.error(state.message);
     }
-  }, [state]);
+  }, [state.success]);
 
   return (
     <div
@@ -40,9 +45,14 @@ const TimeTrackingTicketComponent = ({ ticket }: TimeTrackingTicketProps) => {
           Started at: {new Date(ticket.startTime).toLocaleString()}
         </p>
         {isFinished && (
-          <p className="text-sm text-gray-500">
-            Finished at: {endTime.toLocaleString()}
-          </p>
+          <>
+            <p className="text-sm text-gray-500">
+              Finished at: {new Date(ticket.endTime!).toLocaleString()}
+            </p>
+            <p className="text-sm font-medium text-green-600">
+              Worked: {formatWorkedTime(ticket.workedMinutes)}
+            </p>
+          </>
         )}
       </div>
 

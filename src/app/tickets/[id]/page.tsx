@@ -1,19 +1,31 @@
 import { getTicketById } from "@/actions/ticket.actions";
+import { getCurrentUser } from "@/lib/current-user";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getPriorityClass } from "@/utils/ui";
 import CloseTicketButton from "@/components/CloseTicketButton";
 
-// /tickets/123   → params.id = "123"
 const TicketDetailsPage = async (props: {
-  params: Promise<{id:string}>
+  params: Promise<{ id: string }>
 }) => {
-
   const { id } = await props.params;
-  const ticket = await getTicketById(id);
-  
-  if(!ticket){
+  const user = await getCurrentUser();
+
+  if (!user) {
     notFound();
+  }
+
+  const ticket = await getTicketById(id, user);
+
+  if (!ticket) {
+  return (
+    <div className='min-h-screen bg-blue-50 p-8 flex items-center justify-center'>
+      <div className='text-center'>
+        <p className='text-lg text-red-600 mb-4'>You don't have access to this ticket</p>
+          <Link href='/'>Back to Home</Link>
+      </div>
+    </div>
+    );  
   }
 
   return (
