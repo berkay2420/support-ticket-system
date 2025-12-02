@@ -106,7 +106,14 @@ export async function loginUser(prevState: ResponseResult,
         return { success: false, message: 'Incorrect email or password' };
       }
       
-      const token = await signAuthToken({userId: user.id})
+      const payload = {
+        userId: user.id,
+        name: user.name,
+        email: user.email,
+        department: user.department,
+        isAdmin: user.isAdmin
+      }
+      const token = await signAuthToken(payload);
       await setAuthCookie(token);
 
       logEvent(

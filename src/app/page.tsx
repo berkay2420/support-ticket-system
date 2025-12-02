@@ -80,6 +80,19 @@ const HomePage = async () => {
               <ArrowRight className='w-4 h-4 group-hover:translate-x-1 transition' />
             </div>
           </Link>
+
+          {user.isAdmin && (
+            <Link
+              href="/admin"
+              className="group relative overflow-hidden bg-linear-to-br from-teal-600 to-teal-700 text-white px-6 py-4 rounded-lg font-semibold transition-all duration-300 hover:shadow-md hover:-translate-y-0.5"
+            >
+              <div className="flex items-center justify-center gap-2">
+                <Clock className="w-5 h-5" />
+                <span>Go to admin panel</span>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition" />
+              </div>
+            </Link>
+          )}
         </div>
 
         {/* Tickets Section */}

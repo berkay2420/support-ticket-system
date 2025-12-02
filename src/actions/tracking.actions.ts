@@ -123,3 +123,15 @@ export async function getTrackingTickets() {
     return [];
   }
 }
+
+
+export async function getTimeTrackingById(id: string) {
+  try {
+    const tracking = await prisma.timeTrackingTicket.findUnique({
+      where: { id }
+    });
+    return tracking;
+  } catch (error) {
+    return null;
+  }
+}
