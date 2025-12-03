@@ -1,6 +1,6 @@
 import { getCurrentUser } from "@/lib/current-user";
 import Link from "next/link";
-import { ArrowLeft, AlertCircle, Ticket, Clock, User, FileText } from "lucide-react";
+import { ArrowLeft, AlertCircle, Ticket, Clock, User, FileText, UserPlus} from "lucide-react";
 import TicketPanel from "@/components/adminComponents/TicketPanel";
 import UserPanel from "@/components/adminComponents/UserPanel";
 import { getTickets } from "@/actions/ticket.actions";
@@ -78,6 +78,13 @@ const AdminPage = async ({ searchParams }: { searchParams: Promise<{ department?
               <TicketPanel supportTickets={supportTickets} department={department} />
             </div>
           </div>
+          <Link
+            href='/users/new'
+            className='bg-linear-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-semibold px-6 py-3 rounded-lg transition-all duration-300 hover:shadow-md flex items-center gap-2'
+          >
+            <UserPlus className='w-5 h-5' />
+            Create New Employee
+          </Link>
         </div>
 
 

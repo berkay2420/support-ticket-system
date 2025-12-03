@@ -211,10 +211,13 @@ const UserDetailsPage = async (props: {
                 <ManagerButton userId={user.id} isAdmin={user.isAdmin} />
               )}
               
-              <button className='flex items-center gap-2 bg-linear-to-br from-emerald-600 to-emerald-700 text-white px-6 py-3 rounded-lg font-semibold transition-all duration-300 hover:shadow-md hover:-translate-y-0.5'>
+              <Link 
+                href={`/users/${user.id}/edit`}
+                className='flex items-center gap-2 bg-linear-to-br from-emerald-600 to-emerald-700 text-white px-6 py-3 rounded-lg font-semibold transition-all duration-300 hover:shadow-md hover:-translate-y-0.5'
+              >
                 <Edit className='w-5 h-5' />
                 Edit User
-              </button>
+              </Link>
               
               {currentUser.id !== user.id && !user.isAdmin && (
                 <DeleteEmployeeButton userId={user.id} />

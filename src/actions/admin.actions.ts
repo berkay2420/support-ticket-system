@@ -1,6 +1,8 @@
 'use server'
 import {prisma} from '@/db/prisma';
 import { getCurrentUser } from '@/lib/current-user';
+import { generateSecurePassword } from '@/utils/auth.utils';
+import bcrypt from 'bcryptjs';
 
 type ResponseResult = {
   success: boolean,
@@ -165,4 +167,154 @@ export async function deleteUser(userId: string):Promise<ResponseResult>{
 
   }
   
+}
+
+//Create new Employee
+export async function createUserAsAdmin(
+  prevState: ResponseResult,
+  formData: FormData
+): Promise<ResponseResult> {
+  try {
+    const currentUser = await getCurrentUser();
+
+    if (!currentUser?.isAdmin) {
+      return { 
+        success: false, 
+        message: 'Unauthorized: Only admins can create users' 
+      };
+    }
+
+    const name = formData.get('name') as string;
+    const email = formData.get('email') as string;
+    const department = formData.get('department') as string;
+
+    if (!name || !email || !department) {
+      return { 
+        success: false, 
+        message: 'Please fill all the fields' 
+      };
+    }
+
+    const existingUser = await prisma.user.findUnique({
+      where: { email }
+    });
+
+    if (existingUser) {
+      return { 
+        success: false, 
+        message: 'A user with this email already exists' 
+      };
+    }
+
+    const generatedPassword = generateSecurePassword();
+    const hashedPassword = await bcrypt.hash(generatedPassword, 10);
+
+    const user = await prisma.user.create({
+      data: {
+        name,
+        email,
+        password: hashedPassword,
+        department
+      }
+    });
+
+    return { 
+      success: true, 
+      message: `User created successfully. Password: ${generatedPassword}` 
+    };
+
+  } catch (error) {
+    console.error('Failed to create user:', error);
+    return { 
+      success: false, 
+      message: 'Failed to create user. Please try again later' 
+    };
+  }
+}
+
+export async function updateUserAsAdmin(
+  prevState: ResponseResult,
+  formData: FormData
+): Promise<ResponseResult> {
+  try {
+    const currentUser = await getCurrentUser();
+
+    if (!currentUser?.isAdmin) {
+      return { 
+        success: false, 
+        message: 'Unauthorized: Only admins can update users' 
+      };
+    }
+
+    const userId = formData.get('userId') as string;
+    const name = formData.get('name') as string;
+    const email = formData.get('email') as string;
+    const department = formData.get('department') as string;
+    const resetPassword = formData.get('resetPassword') === 'on';
+
+    if (!userId || !name || !email || !department) {
+      return { 
+        success: false, 
+        message: 'Please fill all the fields' 
+      };
+    }
+
+    const existingUser = await prisma.user.findUnique({
+      where: { id: userId }
+    });
+
+    if (!existingUser) {
+      return { 
+        success: false, 
+        message: 'This user does not exist' 
+      };
+    }
+
+    const emailExists = await prisma.user.findUnique({
+      where: { email }
+    });
+
+    if (emailExists && emailExists.id !== userId) {
+      return { 
+        success: false, 
+        message: 'This email is already in use' 
+      };
+    }
+
+    const updateData: any = {
+      name,
+      email,
+      department
+    };
+
+    let newPassword = '';
+
+    if (resetPassword) {
+      newPassword = generateSecurePassword();
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+      updateData.password = hashedPassword;
+    }
+
+    await prisma.user.update({
+      where: { id: userId },
+      data: updateData
+    });
+
+   
+    const message = resetPassword 
+      ? `User updated successfully. New Password: ${newPassword}`
+      : 'User updated successfully';
+
+    return { 
+      success: true, 
+      message
+    };
+
+  } catch (error) {
+    console.error('Failed to update user:', error);
+    return { 
+      success: false, 
+      message: 'Failed to update user. Please try again later' 
+    };
+  }
 }
