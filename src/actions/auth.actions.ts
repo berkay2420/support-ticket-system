@@ -6,8 +6,50 @@ import { logEvent } from '@/utils/sentry';
 
 type ResponseResult = {
   success: boolean,
-  message: string
+  message: string,
+  errors?: string[];
 }
+
+const PASSWORD_MIN_LENGTH = 8;
+
+const PASSWORD_REQUIREMENTS = {
+  minLength: PASSWORD_MIN_LENGTH,
+  hasUppercase: /[A-Z]/,
+  hasLowercase: /[a-z]/,
+  hasNumbers: /[0-9]/,
+  hasSpecialChars: /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/
+};
+
+
+function validatePassword(password: string): { valid: boolean; errors: string[] } {
+  const errors: string[] = [];
+
+  if (password.length < PASSWORD_REQUIREMENTS.minLength) {
+    errors.push(`Password must be at least ${PASSWORD_REQUIREMENTS.minLength} characters long`);
+  }
+
+  if (!PASSWORD_REQUIREMENTS.hasUppercase.test(password)) {
+    errors.push('Password must contain at least one uppercase letter');
+  }
+
+  if (!PASSWORD_REQUIREMENTS.hasLowercase.test(password)) {
+    errors.push('Password must contain at least one lowercase letter');
+  }
+
+  if (!PASSWORD_REQUIREMENTS.hasNumbers.test(password)) {
+    errors.push('Password must contain at least one number');
+  }
+
+  if (!PASSWORD_REQUIREMENTS.hasSpecialChars.test(password)) {
+    errors.push('Password must contain at least one special character (!@#$%^&*, etc.)');
+  }
+
+  return {
+    valid: errors.length === 0,
+    errors
+  };
+}
+
 
 export async function registerUser(
   prevState: ResponseResult, 
@@ -22,6 +64,15 @@ export async function registerUser(
     
     if(!name || !email || !password || !department){
       return { success: false, message: 'Please fill all the fileds' };
+    }
+
+    const passwordValidation = validatePassword(password);
+    if (!passwordValidation.valid) {
+      return {
+        success: false,
+        message: `Password is not strong enough:`,
+        errors: passwordValidation.errors
+      };
     }
 
     const existingUser = await prisma.user.findUnique({
@@ -63,7 +114,6 @@ export async function registerUser(
     console.log(`Failed to register new user error: ${error}`);
     return {success: false, message: 'Something went wrong please try again later'}
   }
-
 
 }
 

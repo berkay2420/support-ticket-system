@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Quick Ticket",
+  title: "Ticket System",
   description: "Professional and simple support ticket management system",
 };
 
@@ -34,6 +34,7 @@ export default function RootLayout({
         <Toaster 
           position="top-center"
           theme="light"
+          gap={10}
           toastOptions={{
             classNames: {
               toast: 'bg-white text-slate-900 border border-emerald-200 shadow-md',

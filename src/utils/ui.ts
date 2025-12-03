@@ -8,3 +8,21 @@ export const getPriorityClass = (priority: string) => {
       return 'text-green-600 font-bold';
   }
 }
+
+
+export function getAvatarColor(name: string): string {
+  const colors = [
+    'bg-emerald-500',
+    'bg-teal-500',
+    'bg-cyan-500',
+    'bg-blue-500',
+    'bg-indigo-500',
+    'bg-purple-500',
+    'bg-pink-500',
+    'bg-rose-500',
+  ];
+
+  const charCode = name.charCodeAt(0);
+  const index = charCode % colors.length;
+  return colors[index];
+}

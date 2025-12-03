@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyAuthToken } from '@/lib/auth';
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   if (request.nextUrl.pathname.startsWith('/admin')) {
     const token = request.cookies.get('auth-token')?.value;
     if (!token) return NextResponse.redirect(new URL('/login', request.url));

@@ -2,9 +2,9 @@ import { getCurrentUser } from "@/lib/current-user";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, AlertCircle, Calendar, Mail, Building2, Ticket, Clock, Trash2, Edit, User as UserIcon } from 'lucide-react';
-
-// Import your action
+import BackButton from "@/components/BackButton";
 import { getUser } from "@/actions/admin.actions";
+import UserAvatar from "@/components/UserAvatar";
 
 const UserDetailsPage = async (props: {
   params: Promise<{ id: string }>
@@ -80,22 +80,14 @@ const UserDetailsPage = async (props: {
     <div className='min-h-screen bg-linear-to-br from-emerald-50 via-white to-teal-50 p-8'>
       <div className='max-w-4xl mx-auto'>
         {/* Back Button */}
-        <Link
-          href='/admin'
-          className='inline-flex items-center gap-2 text-slate-600 hover:text-emerald-700 mb-8 transition'
-        >
-          <ArrowLeft className='w-5 h-5' />
-          Back to Admin
-        </Link>
-
+        <BackButton/>
+        
         {/* Main Card */}
         <div className='bg-white border border-emerald-200 rounded-lg shadow-sm overflow-hidden'>
           {/* Header with Avatar */}
-          <div className='bg-linear-to-r from-emerald-600 to-teal-600 p-8'>
+           <div className='bg-linear-to-r from-emerald-600 to-teal-600 p-8'>
             <div className='flex items-start gap-6'>
-              <div className='w-24 h-24 rounded-full bg-white bg-opacity-20 border-4 border-white shadow-lg flex items-center justify-center'>
-                <UserIcon className='w-12 h-12 text-white' />
-              </div>
+              <UserAvatar name={user.name} size='xl' />
               <div className='flex-1 text-white'>
                 <h1 className='text-4xl font-bold mb-2'>{user.name}</h1>
                 <p className='text-emerald-100 text-lg'>{user.email}</p>
@@ -105,6 +97,7 @@ const UserDetailsPage = async (props: {
 
           {/* Content */}
           <div className='p-8 space-y-8'>
+
             {/* User Info Grid */}
             <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
               {/* Department */}
@@ -133,7 +126,9 @@ const UserDetailsPage = async (props: {
                   <Mail className='w-5 h-5 text-emerald-600' />
                   <h3 className='text-sm font-semibold text-slate-700'>User ID</h3>
                 </div>
-                <p className='text-sm text-emerald-900 font-mono break-all'>{user.id}</p>
+                <p className='text-sm text-emerald-900 font-mono break-all'>
+                  {user.id.substring(0, 8)}...{user.id.substring(user.id.length - 4)}
+                </p>
               </div>
             </div>
 

@@ -12,20 +12,28 @@ const RegisterForm = () => {
 
   const initialState = {
     success: false,
-    message: ''
-  }
+    message: '',
+    errors:[]
+  };
 
   const [state, formAction] = useActionState(registerUser, initialState);
   
   useEffect(() => {
     if (state.success) {
-      toast.success('Account created successfully!')
+
+      toast.success(state.message);
       router.push('/');
-      router.refresh()
+
+    } else if (state.errors && state.errors.length > 0) {
+
+      state.errors.forEach(err => toast.error(err));
+
     } else if (state.message) {
-      toast.error(state.message)
+
+      toast.error(state.message);
+
     }
-  }, [state, router]);
+    }, [state, router]);
 
   return (
     <div className='min-h-screen flex items-center justify-center bg-linear-to-br from-emerald-50 via-white to-teal-50 px-4 py-8'>

@@ -6,11 +6,6 @@ import UserPanel from "@/components/adminComponents/UserPanel";
 import { getTickets } from "@/actions/ticket.actions";
 import { getAllUsers } from "@/actions/admin.actions";
 
-// Placeholder server actions (sonra replace et)
-async function getUsersByDepartment(departmentName: string) { return [] }
-async function getOpenTickets(departmentName: string) { return [] }
-async function getTimeTrackingByDepartment(departmentName: string) { return [] }
-
 const AdminPage = async ({ searchParams }: { searchParams: Promise<{ department?: string }> }) => {
   const params = await searchParams;
   const user = await getCurrentUser();
@@ -73,17 +68,16 @@ const AdminPage = async ({ searchParams }: { searchParams: Promise<{ department?
         </div>
 
         {/* Action Buttons Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-16">
-          <UserPanel allUsers={allUsers} department={department} />
+        <div className="mb-16 flex flex-col items-center gap-4">
+          <div className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="flex justify-center">
+              <UserPanel allUsers={allUsers} department={department} />
+            </div>
 
-          <div className="lg:col-span-2">
-            <TicketPanel supportTickets={supportTickets} department={department} />
+            <div className="flex justify-center">
+              <TicketPanel supportTickets={supportTickets} department={department} />
+            </div>
           </div>
-
-          <button className="group relative overflow-hidden bg-linear-to-br from-teal-600 to-teal-700 text-white px-6 py-4 rounded-lg font-semibold transition-all duration-300 hover:shadow-md hover:-translate-y-0.5 flex items-center justify-center gap-2">
-            <FileText className="w-5 h-5" />
-            Reports
-          </button>
         </div>
 
 

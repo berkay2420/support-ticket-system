@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { loginUser } from '@/actions/auth.actions';
 import { LogIn, Mail, Lock } from 'lucide-react';
 import Link from 'next/link';
+import { error } from 'console';
 
 const LoginForm = () => {
   const router = useRouter();
@@ -13,18 +14,27 @@ const LoginForm = () => {
   const initialState = {
     success: false,
     message: '',
+    errors:[]
   };
 
   const [state, formAction] = useActionState(loginUser, initialState);
 
   useEffect(() => {
     if (state.success) {
-      toast.success('Login successful!');
+
+      toast.success(state.message);
       router.push('/');
+
+    } else if (state.errors && state.errors.length > 0) {
+
+      state.errors.forEach(err => toast.error(err));
+
     } else if (state.message) {
+
       toast.error(state.message);
+
     }
-  }, [state, router]);
+    }, [state, router]);
 
   return (
     <div className='min-h-screen flex items-center justify-center bg-linear-to-br from-emerald-50 via-white to-teal-50 px-4 py-8'>

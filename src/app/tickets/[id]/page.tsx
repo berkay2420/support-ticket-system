@@ -4,6 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import CloseTicketButton from "@/components/CloseTicketButton";
 import { ArrowLeft, AlertCircle, Calendar, FileText, Tag } from 'lucide-react';
+import BackButton from "@/components/BackButton";
 
 const TicketDetailsPage = async (props: {
   params: Promise<{ id: string }>
@@ -24,13 +25,7 @@ const TicketDetailsPage = async (props: {
           <AlertCircle className='w-12 h-12 text-red-500 mx-auto mb-4' />
           <h2 className='text-2xl font-bold text-emerald-900 mb-2'>Access Denied</h2>
           <p className='text-slate-600 mb-6'>You don't have permission to view this ticket</p>
-          <Link
-            href='/'
-            className='inline-flex items-center gap-2 bg-linear-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-semibold px-6 py-3 rounded-lg transition-all duration-300 hover:shadow-md'
-          >
-            <ArrowLeft className='w-5 h-5' />
-            Back to Home
-          </Link>
+          <BackButton/>
         </div>
       </div>
     );
