@@ -1,10 +1,12 @@
 import { getCurrentUser } from "@/lib/current-user";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, AlertCircle, Calendar, Mail, Building2, Ticket, Clock, Trash2, Edit, User as UserIcon } from 'lucide-react';
+import { ArrowLeft, AlertCircle, Calendar, Mail, Building2, Ticket, Clock, Trash2, Edit } from 'lucide-react';
 import BackButton from "@/components/BackButton";
 import { getUser } from "@/actions/admin.actions";
 import UserAvatar from "@/components/UserAvatar";
+import ManagerButton from "@/components/adminComponents/ManagerButton";
+import DeleteEmployeeButton from "@/components/adminComponents/DeleteEmployeeButton";
 
 const UserDetailsPage = async (props: {
   params: Promise<{ id: string }>
@@ -85,7 +87,7 @@ const UserDetailsPage = async (props: {
         {/* Main Card */}
         <div className='bg-white border border-emerald-200 rounded-lg shadow-sm overflow-hidden'>
           {/* Header with Avatar */}
-           <div className='bg-linear-to-r from-emerald-600 to-teal-600 p-8'>
+          <div className='bg-linear-to-r from-emerald-600 to-teal-600 p-8'>
             <div className='flex items-start gap-6'>
               <UserAvatar name={user.name} size='xl' />
               <div className='flex-1 text-white'>
@@ -204,15 +206,19 @@ const UserDetailsPage = async (props: {
             </div>
 
             {/* Action Buttons */}
-            <div className='border-t border-emerald-100 pt-8 flex gap-3'>
+            <div className='border-t border-emerald-100 pt-8 flex flex-wrap gap-3'>
+              {currentUser.id !== user.id && (
+                <ManagerButton userId={user.id} isAdmin={user.isAdmin} />
+              )}
+              
               <button className='flex items-center gap-2 bg-linear-to-br from-emerald-600 to-emerald-700 text-white px-6 py-3 rounded-lg font-semibold transition-all duration-300 hover:shadow-md hover:-translate-y-0.5'>
                 <Edit className='w-5 h-5' />
                 Edit User
               </button>
-              <button className='flex items-center gap-2 bg-red-50 text-red-700 border border-red-200 px-6 py-3 rounded-lg font-semibold transition-all duration-300 hover:bg-red-100'>
-                <Trash2 className='w-5 h-5' />
-                Delete User
-              </button>
+              
+              {currentUser.id !== user.id && !user.isAdmin && (
+                <DeleteEmployeeButton userId={user.id} />
+              )}
             </div>
           </div>
         </div>

@@ -86,7 +86,8 @@ export async function getTicketById(
 ) {
   try {
     const ticket = await prisma.ticket.findUnique({
-      where: { id: Number(id) }
+      where: { id: Number(id) },
+      include: {user: true}
     });
 
     if (!ticket) {

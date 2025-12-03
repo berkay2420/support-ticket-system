@@ -31,7 +31,7 @@ const AdminPage = async ({ searchParams }: { searchParams: Promise<{ department?
 
   // Admin actions
   const department = params.department || "IT";
-  const departments = ["IT", "HR", "Finance", "Sales", "Marketing"];
+  const departments = ["IT", "HR","Sales",];
   
   const supportTickets = await getTickets();
   const allUsers = await getAllUsers() || [];

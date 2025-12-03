@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import CloseTicketButton from "@/components/CloseTicketButton";
 import { ArrowLeft, AlertCircle, Calendar, FileText, Tag } from 'lucide-react';
 import BackButton from "@/components/BackButton";
+import { User } from 'lucide-react';
 
 const TicketDetailsPage = async (props: {
   params: Promise<{ id: string }>
@@ -94,6 +95,25 @@ const TicketDetailsPage = async (props: {
 
           {/* Metadata */}
           <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+            {/* User Info */}
+            <div>
+              <div className='flex items-center gap-2 mb-3'>
+                <User className='w-5 h-5 text-emerald-600' />
+                <h3 className='text-sm font-semibold text-slate-700'>Opened by</h3>
+              </div>
+              {user?.isAdmin ? (
+                <Link
+                  href={`/users/${ticket.userId}`}
+                  className='text-lg text-emerald-900 font-medium hover:text-emerald-700 hover:underline transition'
+                >
+                  {ticket.user?.name || 'Unknown User'}
+                </Link>
+              ) : (
+                <p className='text-lg text-emerald-900 font-medium'>
+                  {ticket.user?.name || 'Unknown User'}
+                </p>
+              )}
+            </div>
             {/* Department */}
             <div>
               <div className='flex items-center gap-2 mb-3'>
@@ -122,6 +142,7 @@ const TicketDetailsPage = async (props: {
               />
             </div>
           )}
+          
         </div>
       </div>
     </div>
