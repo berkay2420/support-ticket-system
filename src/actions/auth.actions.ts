@@ -3,6 +3,8 @@ import {prisma} from '@/db/prisma';
 import bcrypt from 'bcryptjs';
 import { signAuthToken, setAuthCookie, removeAuthCookie } from '@/lib/auth';
 import { logEvent } from '@/utils/sentry';
+import { createAuditLog } from './log.actions';
+
 
 type ResponseResult = {
   success: boolean,
@@ -93,6 +95,16 @@ export async function registerUser(
         department: department
       }
     })
+
+    await createAuditLog(
+      user.id,
+      'Registered',
+      'User',
+      user.id,
+      user.name || 'Unknown',
+      'User registered'
+    );
+
     const payload = {
       userId: user.id,
       name: user.name,

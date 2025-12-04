@@ -5,6 +5,8 @@ import TicketPanel from "@/components/adminComponents/TicketPanel";
 import UserPanel from "@/components/adminComponents/UserPanel";
 import { getTickets } from "@/actions/ticket.actions";
 import { getAllUsers } from "@/actions/admin.actions";
+import { getAuditLogs } from "@/actions/log.actions";
+import ActivityPanel from "@/components/adminComponents/ActivityLogPanel";
 
 const AdminPage = async ({ searchParams }: { searchParams: Promise<{ department?: string }> }) => {
   const params = await searchParams;
@@ -35,6 +37,8 @@ const AdminPage = async ({ searchParams }: { searchParams: Promise<{ department?
   
   const supportTickets = await getTickets();
   const allUsers = await getAllUsers() || [];
+
+  const auditLogs = await getAuditLogs(50);
 
   return (
     <main className="min-h-screen bg-linear-to-br from-emerald-50 via-white to-teal-50 px-4 py-16">
@@ -85,6 +89,10 @@ const AdminPage = async ({ searchParams }: { searchParams: Promise<{ department?
             <UserPlus className='w-5 h-5' />
             Create New Employee
           </Link>
+        </div>
+        {/* Activity Log Panel */}
+        <div className="w-full max-w-4xl mx-auto">
+          <ActivityPanel logs={auditLogs} />
         </div>
 
 

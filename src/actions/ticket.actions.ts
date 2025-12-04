@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache';
 import { logEvent } from '@/utils/sentry';
 import { getCurrentUser } from '@/lib/current-user';
 import { verifyAuthToken } from '@/lib/auth';
+import { createAuditLog } from './log.actions';
 
 export async function createTicket(
   prevState: { success: boolean; message: string },
@@ -36,12 +37,22 @@ export async function createTicket(
       }
     });
 
+    await createAuditLog(
+      user.id,
+      'Created',
+      'Ticket',
+      ticket.id.toString(),
+      subject,
+      'Created new support ticket'
+    );
+
     logEvent(`Ticket Created Successfuly`,
         'ticket', 
         {ticketId: ticket.id}, 
         'warning'
-      );
+    );
 
+    
     revalidatePath('/tickets');
     return { success: true, message: 'Ticket created successfully' };
   
@@ -142,10 +153,18 @@ export async function closeTicket(
         data: {status: 'Closed'}
       });
 
+      await createAuditLog(
+        user.id,
+        'Closed',
+        'Ticket',
+        ticketId.toString(),
+        ticket.subject,
+        'Closed support ticket'
+      );
+
       revalidatePath('/tickets');
       revalidatePath(`/tickets/${ticket.id}`);
-
-      logEvent('Ticket cloSED successfully', 'ticket', {}, 'warning');
+      
       return {success:true, message:'Ticket is closed successfully'}
       
     } catch (error) {

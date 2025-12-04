@@ -1,8 +1,10 @@
 'use server'
+
 import {prisma} from '@/db/prisma';
 import { getCurrentUser } from '@/lib/current-user';
 import { generateSecurePassword } from '@/utils/auth.utils';
 import bcrypt from 'bcryptjs';
+import { createAuditLog } from './log.actions';
 
 type ResponseResult = {
   success: boolean,
@@ -109,6 +111,8 @@ export async function getUser(id: string) {
 //Give manager privileges to user
 export async function makeAdmin(userId: string): Promise<ResponseResult> {
   try {
+
+    const currentUser = await getCurrentUser();
     const existingUser = await prisma.user.findUnique({
       where: { id: userId } 
     });
@@ -126,6 +130,15 @@ export async function makeAdmin(userId: string): Promise<ResponseResult> {
       data: { isAdmin: true }
     });
 
+    await createAuditLog(
+      currentUser?.id || '',
+      'Promoted',
+      'User',
+      userId,
+      existingUser.name || 'Unknown',
+      'Promoted to admin'
+    );
+
     return { success: true, message: 'This user now has admin privileges' };
   } catch (error) {
     console.error(error);
@@ -136,11 +149,23 @@ export async function makeAdmin(userId: string): Promise<ResponseResult> {
 //Revoke manager privilges from user
 export async function revokeAdmin(userId: string): Promise<ResponseResult> {
   try {
+    const currentUser = await getCurrentUser();
     const user = await prisma.user.findUnique({ where: { id: userId } });
+    
     if (!user) return { success: false, message: 'This user does not exist' };
     if (!user.isAdmin) return { success: false, message: 'This employee is not an admin' };
 
     await prisma.user.update({ where: { id: userId }, data: { isAdmin: false } });
+
+    await createAuditLog(
+      currentUser?.id || '',
+      'Revoked',
+      'User',
+      userId,
+      user.name || 'Unknown',
+      'Revoked admin privileges'
+    );
+
     return { success: true, message: 'Admin privileges revoked' };
   } catch (error)  {
     return { success: false, message: 'Failed to revoke privileges, please try again later' };
@@ -150,7 +175,10 @@ export async function revokeAdmin(userId: string): Promise<ResponseResult> {
 //Delete Employee 
 export async function deleteUser(userId: string):Promise<ResponseResult>{
   try {
+
+    const currentUser = await getCurrentUser();
     const user = await prisma.user.findUnique({ where: { id: userId } });
+    
     if (!user) return { success: false, message: 'This user does not exist' };
 
     await prisma.user.delete({
@@ -158,7 +186,16 @@ export async function deleteUser(userId: string):Promise<ResponseResult>{
         id: userId
       }
     });
-    
+
+    await createAuditLog(
+      currentUser?.id || '',
+      'Deleted',
+      'User',
+      userId,
+      user.name || 'Unknown',
+      'Deleted employee'
+    );
+
     return { success: true, message: 'Employee Deleted Successfully' };
 
   } catch (error) {
@@ -217,6 +254,15 @@ export async function createUserAsAdmin(
         department
       }
     });
+
+    await createAuditLog(
+      currentUser.id,
+      'Created',
+      'User',
+      user.id,
+      user.name || 'Unknown',
+      'Created new employee'
+    );
 
     return { 
       success: true, 
@@ -300,6 +346,14 @@ export async function updateUserAsAdmin(
       data: updateData
     });
 
+    await createAuditLog(
+      currentUser.id,
+      'Updated',
+      'User',
+      userId,
+      name,
+      resetPassword ? 'Updated employee and reset password' : 'Updated employee information'
+    );
    
     const message = resetPassword 
       ? `User updated successfully. New Password: ${newPassword}`

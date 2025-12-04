@@ -17,6 +17,7 @@ model User {
   updatedAt               DateTime    @updatedAt
   tickets                 Ticket[]
   time_tracking_tickets   TimeTrackingTicket[]
+  auditLogs               AuditLog[]
   department              String
   isAdmin                 Boolean     @default(false)
 }
@@ -43,4 +44,21 @@ model TimeTrackingTicket {
   startTime   DateTime  
   endTime     DateTime?
   workedMinutes Int?      
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  action    String
+  entity    String
+  entityId  String?
+  entityName String?
+  description String
+  metadata  Json?
+  createdAt DateTime @default(now())
+  
+  @@index([userId])
+  @@index([createdAt])
+  @@index([action])
 }

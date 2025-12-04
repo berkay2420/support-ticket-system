@@ -3,7 +3,7 @@ import {prisma} from '@/db/prisma';
 import { revalidatePath } from 'next/cache';
 import { logEvent } from '@/utils/sentry';
 import { getCurrentUser } from '@/lib/current-user';
-
+import { createAuditLog } from './log.actions';
 
 export async function createTrackingTikcet(
   prevState: { success: boolean; message: string },
@@ -32,6 +32,15 @@ export async function createTrackingTikcet(
         },
       }
     });
+
+    await createAuditLog(
+      user.id,
+      'Started',
+      'Time Tracking',
+      ticket.id,
+      description,
+      'Started time tracking'
+    );
 
     logEvent(`Tracking Ticket Created Successfuly`,
         'ticket', 
@@ -81,6 +90,16 @@ export async function finishTrackingTime(
         workedMinutes: workedMinutes
       }
     });
+
+    await createAuditLog(
+      user.id,
+      'Finished',
+      'Time Tracking',
+      ticket.id,
+      existingTicket.description,
+      `Finished time tracking - ${workedMinutes} minutes worked`,
+      { workedMinutes }
+    );
 
     logEvent(`Tracking Ticket Finished`,
         'ticket', 
