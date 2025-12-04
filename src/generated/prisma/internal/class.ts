@@ -34,6 +34,14 @@ const config: runtime.GetPrismaClientConfig = {
         "fromEnvVar": null,
         "value": "windows",
         "native": true
+      },
+      {
+        "fromEnvVar": null,
+        "value": "rhel-openssl-3.0.x"
+      },
+      {
+        "fromEnvVar": null,
+        "value": "windows"
       }
     ],
     "previewFeatures": [],
@@ -56,8 +64,8 @@ const config: runtime.GetPrismaClientConfig = {
       }
     }
   },
-  "inlineSchema": "generator client {\n  provider = \"prisma-client\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id                    String               @id @default(cuid())\n  email                 String               @unique\n  name                  String?\n  password              String\n  createdAt             DateTime             @default(now())\n  updatedAt             DateTime             @updatedAt\n  tickets               Ticket[]\n  time_tracking_tickets TimeTrackingTicket[]\n  auditLogs             AuditLog[]\n  department            String\n  isAdmin               Boolean              @default(false)\n}\n\nmodel Ticket {\n  id               Int      @id @default(autoincrement())\n  subject          String\n  description      String\n  priority         String\n  status           String   @default(\"Open\")\n  createdAt        DateTime @default(now())\n  updatedAt        DateTime @updatedAt\n  userId           String\n  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)\n  issuerDepartment String\n}\n\nmodel TimeTrackingTicket {\n  id            String    @id @default(cuid())\n  userId        String\n  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)\n  description   String\n  createdAt     DateTime  @default(now())\n  startTime     DateTime\n  endTime       DateTime?\n  workedMinutes Int?\n}\n\nmodel AuditLog {\n  id          String   @id @default(cuid())\n  userId      String\n  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)\n  action      String\n  entity      String\n  entityId    String?\n  entityName  String?\n  description String\n  metadata    Json?\n  createdAt   DateTime @default(now())\n\n  @@index([userId])\n  @@index([createdAt])\n  @@index([action])\n}\n",
-  "inlineSchemaHash": "c55fdeb0acb26bbad72f5e0783ff120d7dc86dc1da13725c0edfa60df7da9364",
+  "inlineSchema": "generator client {\n  provider      = \"prisma-client\"\n  output        = \"../src/generated/prisma\"\n  binaryTargets = [\"native\", \"rhel-openssl-3.0.x\", \"windows\"]\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id                    String               @id @default(cuid())\n  email                 String               @unique\n  name                  String?\n  password              String\n  createdAt             DateTime             @default(now())\n  updatedAt             DateTime             @updatedAt\n  tickets               Ticket[]\n  time_tracking_tickets TimeTrackingTicket[]\n  auditLogs             AuditLog[]\n  department            String\n  isAdmin               Boolean              @default(false)\n}\n\nmodel Ticket {\n  id               Int      @id @default(autoincrement())\n  subject          String\n  description      String\n  priority         String\n  status           String   @default(\"Open\")\n  createdAt        DateTime @default(now())\n  updatedAt        DateTime @updatedAt\n  userId           String\n  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)\n  issuerDepartment String\n}\n\nmodel TimeTrackingTicket {\n  id            String    @id @default(cuid())\n  userId        String\n  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)\n  description   String\n  createdAt     DateTime  @default(now())\n  startTime     DateTime\n  endTime       DateTime?\n  workedMinutes Int?\n}\n\nmodel AuditLog {\n  id          String   @id @default(cuid())\n  userId      String\n  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)\n  action      String\n  entity      String\n  entityId    String?\n  entityName  String?\n  description String\n  metadata    Json?\n  createdAt   DateTime @default(now())\n\n  @@index([userId])\n  @@index([createdAt])\n  @@index([action])\n}\n",
+  "inlineSchemaHash": "8b337c8346407109133e6c366c9a9fb20d37fb17d4f0c87a1eee9b39ad1b97de",
   "copyEngine": true,
   "runtimeDataModel": {
     "models": {},
