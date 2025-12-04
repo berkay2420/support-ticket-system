@@ -28,7 +28,7 @@ const LogoutButton = () => {
         className='bg-linear-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-4 py-2 rounded-lg font-semibold transition-all duration-300 hover:shadow-md flex items-center gap-2'
       >
         <LogOut className='w-4 h-4' />
-        <span>Sign Out</span>
+        <span>Log Out</span>
       </button>
     </form>
   );

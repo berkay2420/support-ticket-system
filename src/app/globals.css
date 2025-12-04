@@ -34,3 +34,14 @@ body {
   animation: slideUp 0.6s ease-in forwards;
   animation-delay: 0.2s;
 }
+
+/* MOBILE ONLY (max-width: 480px) */
+@media (max-width: 480px) {
+  html {
+    font-size: 12px; /* Makes everything smaller */
+  }
+
+  body {
+    zoom: 0.9; /* Light scale effect */
+  }
+}

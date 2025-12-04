@@ -42,7 +42,7 @@ const Navbar = async () => {
 
               <div className='w-px h-6 bg-emerald-200'></div>
 
-              <Link
+              {/* <Link
                 href='/tickets/new'
                 className='bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg transition-all duration-300 hover:shadow-md text-sm font-semibold'
               >
@@ -54,7 +54,7 @@ const Navbar = async () => {
                 className='bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-lg transition-all duration-300 hover:shadow-md text-sm font-semibold'
               >
                 Start Track
-              </Link>
+              </Link> */}
             </div>
 
             {/* Mobile Menu */}
