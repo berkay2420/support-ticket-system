@@ -4,6 +4,7 @@ import UserComponent from "./UserComponent";
 import { Users, ChevronDown } from "lucide-react";
 
 type User = {
+  id: string;
   name: string | null;
   email: string;
   department: string;

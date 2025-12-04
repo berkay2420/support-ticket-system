@@ -45,8 +45,8 @@ const AdminPage = async ({ searchParams }: { searchParams: Promise<{ department?
       <div className="max-w-6xl mx-auto">
         {/* Hero Section */}
         <div className="text-center mb-16">
-          <h1 className="text-5xl md:text-6xl font-bold mb-4 text-emerald-900">Admin Panel</h1>
-          <p className="text-xl text-slate-700 mb-2">Manage users, tickets, and time tracking efficiently</p>
+          <h1 className="text-5xl md:text-6xl font-bold mb-4 text-emerald-900">Manager Panel</h1>
+          <p className="text-xl text-slate-700 mb-2">Manage employees, tickets, and time tracking efficiently</p>
         </div>
 
         {/* Department Selector */}
@@ -92,7 +92,7 @@ const AdminPage = async ({ searchParams }: { searchParams: Promise<{ department?
         </div>
         {/* Activity Log Panel */}
         <div className="w-full max-w-4xl mx-auto">
-          <ActivityPanel logs={auditLogs} />
+          <ActivityPanel logs={auditLogs} isInterActive={user.isAdmin} />
         </div>
 
 

@@ -59,7 +59,7 @@ const CreateUserForm = () => {
                 <UserPlus className='w-8 h-8 text-white' />
               </div>
             </div>
-            <h1 className='text-3xl font-bold mb-2 text-emerald-900'>Create New User</h1>
+            <h1 className='text-3xl font-bold mb-2 text-emerald-900'>Create New Employee</h1>
             <p className='text-slate-600'>Add a new team member</p>
           </div>
 
@@ -113,8 +113,6 @@ const CreateUserForm = () => {
                   <option value='Sales' className='bg-white'>Sales</option>
                   <option value='IT' className='bg-white'>IT</option>
                   <option value='HR' className='bg-white'>HR</option>
-                  <option value='Finance' className='bg-white'>Finance</option>
-                  <option value='Marketing' className='bg-white'>Marketing</option>
                 </select>
               </div>
             </div>
@@ -125,14 +123,14 @@ const CreateUserForm = () => {
               type='submit'
             >
               <UserPlus className='w-5 h-5 group-hover:scale-110 transition' />
-              <span>Create User</span>
+              <span>Create Employee</span>
             </button>
           </form>
 
           {/* Footer */}
           <div className='mt-6 text-center'>
             <p className='text-slate-600 text-sm'>
-              User will be created with secure password encryption
+              New employee will be created with secure password encryption
             </p>
           </div>
         </div>

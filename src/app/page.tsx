@@ -30,7 +30,7 @@ const HomePage = async () => {
           </div>
 
           <h1 className="text-5xl md:text-6xl font-bold mb-4 text-emerald-900">
-            Quick Ticket
+            Quick Support Ticket
           </h1>
 
           <p className="text-xl text-slate-700 mb-2">
@@ -93,7 +93,7 @@ const HomePage = async () => {
             >
               <div className="flex items-center justify-center gap-2">
                 <Clock className="w-5 h-5" />
-                <span>Admin Panel</span>
+                <span>Manager Panel</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition" />
               </div>
             </Link>

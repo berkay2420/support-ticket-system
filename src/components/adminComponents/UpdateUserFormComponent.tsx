@@ -78,7 +78,7 @@ const UpdateUserForm = ({ user }: UpdateUserFormProps) => {
           className='inline-flex items-center gap-2 text-slate-600 hover:text-emerald-700 mb-8 transition'
         >
           <ArrowLeft className='w-5 h-5' />
-          Back to User
+          Back to Employee
         </Link>
 
         {/* Card */}
@@ -90,8 +90,8 @@ const UpdateUserForm = ({ user }: UpdateUserFormProps) => {
                 <Edit3 className='w-8 h-8 text-white' />
               </div>
             </div>
-            <h1 className='text-3xl font-bold mb-2 text-emerald-900'>Update User</h1>
-            <p className='text-slate-600'>Edit user information</p>
+            <h1 className='text-3xl font-bold mb-2 text-emerald-900'>Update Employee</h1>
+            <p className='text-slate-600'>Edit employee information</p>
           </div>
 
           {/* Form */}
