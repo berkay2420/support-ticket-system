@@ -5,12 +5,6 @@
     },
     "app/**/*.ts": {
       "includeFiles": "src/generated/prisma/**"
-    },
-    "api/**/*.js": {
-      "includeFiles": "src/generated/prisma/**"
-    },
-    "api/**/*.ts": {
-      "includeFiles": "src/generated/prisma/**"
     }
   }
 }
